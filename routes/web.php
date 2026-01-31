@@ -17,4 +17,5 @@ Route::middleware([
 
     Route::get('/subscription', [App\Http\Controllers\SubscriptionController::class, 'index'])->name('subscription.index');
     Route::post('/subscription', [App\Http\Controllers\SubscriptionController::class, 'store'])->name('subscription.store');
+    Route::delete('/subscription', [App\Http\Controllers\SubscriptionController::class, 'destroy'])->name('subscription.destroy');
 });

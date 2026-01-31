@@ -14,6 +14,9 @@ Route::middleware([
     })->name('admin.dashboard');
 
     Route::get('/dashboard', function () {
-    return view('admin.dashboard');
-})->name('admin.dashboard');
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+
+    Route::resource('plans', \App\Http\Controllers\Admin\PlanController::class)->names('admin.plans');
+    Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users.index');
 });

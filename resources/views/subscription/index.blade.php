@@ -27,8 +27,8 @@
                         <h3 class="text-lg font-medium text-gray-900">Current Plan</h3>
                         <div class="mt-4 p-4 bg-gray-50 rounded-md">
                             @if ($tenant->plan)
-                                <p class="text-2xl font-bold">{{ $tenant->plan->name }}</p>
-                                <p class="text-gray-500">{{ $tenant->plan->price / 100 }} {{ $tenant->plan->currency }} / {{ $tenant->plan->interval }}</p>
+                                <p class="text-2xl font-bold">{{ $tenant->plan?->name }}</p>
+                                <p class="text-gray-500">{{ $tenant->plan?->price / 100 }} {{ $tenant->plan?->currency }} / {{ $tenant->plan?->interval }}</p>
                             @else
                                 <p class="text-gray-500">No active plan.</p>
                             @endif
@@ -62,10 +62,28 @@
                                 <div id="card-errors" role="alert" class="mt-2 text-sm text-red-600"></div>
                             </div>
 
-                            <button id="card-button" type="button" data-secret="{{ $intent->client_secret }}" class="mt-4 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                Subscribe Now
+                                Subscribe / Swap
                             </button>
                         </form>
+
+                        @if ($tenant->subscribed('default') && !$tenant->subscription('default')->onGracePeriod())
+                            <div class="mt-8 border-t pt-6">
+                                <h3 class="text-lg font-medium text-red-600">Danger Zone</h3>
+                                <form action="{{ route('subscription.destroy') }}" method="POST" class="mt-4" onsubmit="return confirm('Are you sure you want to cancel?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none">
+                                        Cancel Subscription
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+                        
+                        @if ($tenant->subscription('default') && $tenant->subscription('default')->onGracePeriod())
+                             <div class="mt-4 p-4 bg-yellow-50 text-yellow-700 rounded-md">
+                                 Subscription will end on {{ $tenant->subscription('default')->ends_at->format('Y-m-d') }}.
+                             </div>
+                        @endif
                     </div>
                 </div>
 

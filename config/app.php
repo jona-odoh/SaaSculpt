@@ -123,4 +123,8 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+
+    'super_admins' => [
+        env('SUPER_ADMIN_EMAIL', 'admin@saasculpt.test'),
+    ],
 ];

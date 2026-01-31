@@ -11,7 +11,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(\App\Services\CurrentTenant::class);
+        $this->app->bind(\App\Contracts\BillingService::class, \App\Services\StripeBillingService::class);
     }
 
     /**

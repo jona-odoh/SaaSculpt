@@ -31,6 +31,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'current_team_id',
     ];
 
     /**
@@ -65,5 +66,24 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get all of the teams the user belongs to.
+     */
+    public function teams()
+    {
+        return $this->belongsToMany(Tenant::class, 'team_user', 'user_id', 'tenant_id')
+                    ->withPivot('role')
+                    ->withTimestamps()
+                    ->as('membership');
+    }
+
+    /**
+     * Get all of the teams the user owns.
+     */
+    public function ownedTeams()
+    {
+        return $this->hasMany(Tenant::class, 'user_id');
     }
 }
