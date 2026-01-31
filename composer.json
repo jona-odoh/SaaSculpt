@@ -9,7 +9,9 @@
         "laravel/cashier": "*",
         "laravel/framework": "^11.0",
         "laravel/jetstream": "*",
+        "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
+        "livewire/livewire": "^3.6.4",
         "unicodeveloper/laravel-paystack": "*"
     },
     "require-dev": {

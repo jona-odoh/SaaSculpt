@@ -54,4 +54,8 @@ class Tenant extends JetstreamTeam
         'updated' => TeamUpdated::class,
         'deleted' => TeamDeleted::class,
     ];
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
+    }
 }

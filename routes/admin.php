@@ -13,7 +13,7 @@ Route::middleware([
         return view('admin.dashboard'); // Ensure this view exists or return text
     })->name('admin.dashboard');
 
-    Route::get('/tenants', function () {
-        return \App\Models\Tenant::all();
-    })->name('admin.tenants');
+    Route::get('/dashboard', function () {
+    return view('admin.dashboard');
+})->name('admin.dashboard');
 });
