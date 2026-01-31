@@ -2,7 +2,7 @@
 
 namespace App\Actions\Jetstream;
 
-use App\Models\Team;
+use App\Models\Tenant;
 use App\Models\User;
 use Closure;
 use Illuminate\Database\Query\Builder;
@@ -21,7 +21,7 @@ class InviteTeamMember implements InvitesTeamMembers
     /**
      * Invite a new team member to the given team.
      */
-    public function invite(User $user, Team $team, string $email, ?string $role = null): void
+    public function invite(User $user, Tenant $team, string $email, ?string $role = null): void
     {
         Gate::forUser($user)->authorize('addTeamMember', $team);
 
@@ -40,7 +40,7 @@ class InviteTeamMember implements InvitesTeamMembers
     /**
      * Validate the invite member operation.
      */
-    protected function validate(Team $team, string $email, ?string $role): void
+    protected function validate(Tenant $team, string $email, ?string $role): void
     {
         Validator::make([
             'email' => $email,
@@ -57,13 +57,13 @@ class InviteTeamMember implements InvitesTeamMembers
      *
      * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
      */
-    protected function rules(Team $team): array
+    protected function rules(Tenant $team): array
     {
         return array_filter([
             'email' => [
                 'required', 'email',
                 Rule::unique(Jetstream::teamInvitationModel())->where(function (Builder $query) use ($team) {
-                    $query->where('team_id', $team->id);
+                    $query->where('tenant_id', $team->id);
                 }),
             ],
             'role' => Jetstream::hasRoles()

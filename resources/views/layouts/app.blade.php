@@ -28,13 +28,19 @@
         @livewireStyles
     </head>
     <body class="font-sans antialiased">
+    @if(session()->has('impersonator_id'))
+        <div class="bg-yellow-500 text-white text-center px-4 py-2 text-sm font-bold flex justify-center items-center">
+            <span>You are currently impersonating {{ auth()->user()->name }}.</span>
+            <a href="{{ route('impersonate.leave') }}" class="ml-4 underline hover:text-yellow-100">Stop Impersonating</a>
+        </div>
+    @endif
         <x-banner />
 
         <div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex" x-data="{ sidebarOpen: false }">
             
             <!-- Sidebar -->
             <aside class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-white transform transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:inset-auto"
-                   :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}">
+                   :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen, 'md:translate-x-0': true}">
                 
                 <!-- Logo -->
                 <div class="flex items-center justify-center h-20 bg-slate-950 border-b border-slate-800">

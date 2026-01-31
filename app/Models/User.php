@@ -32,7 +32,32 @@ class User extends Authenticatable
         'email',
         'password',
         'current_team_id',
+        'banned_at',
     ];
+
+    /**
+     * Check if the user is banned.
+     */
+    public function isBanned(): bool
+    {
+        return ! is_null($this->banned_at);
+    }
+
+    /**
+     * Get the user's activity logs.
+     */
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class)->orderByDesc('created_at');
+    }
+
+    /**
+     * Get the user's sessions.
+     */
+    public function sessions()
+    {
+        return $this->hasMany(Session::class); // We need a Session model or just use DB
+    }
 
     /**
      * The attributes that should be hidden for serialization.

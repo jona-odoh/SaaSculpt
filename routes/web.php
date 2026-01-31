@@ -29,3 +29,5 @@ Route::domain(config('app.url_base', 'saasculpt.test'))->group(function () {
         })->name('dashboard');
     });
 });
+
+Route::get('/impersonate/leave', [\App\Http\Controllers\Admin\UserController::class, 'stopImpersonating'])->name('impersonate.leave');

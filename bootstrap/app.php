@@ -25,7 +25,11 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->append(\App\Http\Middleware\TenantResolver::class);
+        $middleware->web(append: [
+            \App\Http\Middleware\CheckIfBanned::class,
+            \App\Http\Middleware\TenantResolver::class,
+        ]);
+        // $middleware->append(\App\Http\Middleware\TenantResolver::class); // Moving to web group explicitly or keeping global if needed, but CheckIfBanned needs session so mostly web
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

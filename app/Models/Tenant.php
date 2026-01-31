@@ -58,4 +58,12 @@ class Tenant extends JetstreamTeam
     {
         return $this->belongsTo(Plan::class);
     }
+
+    /**
+     * Get all of the pending invitations for the team.
+     */
+    public function teamInvitations()
+    {
+        return $this->hasMany(TeamInvitation::class, 'tenant_id');
+    }
 }

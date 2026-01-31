@@ -28,9 +28,9 @@
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex" x-data="{ sidebarOpen: false }">
             
-            <!-- Sidebar -->
+                <!-- Sidebar -->
             <aside class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-white transform transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:inset-auto"
-                   :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}">
+                   :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen, 'md:translate-x-0': true}">
                 
                 <!-- Logo -->
                 <div class="flex items-center justify-center h-20 bg-slate-950 border-b border-slate-800">
@@ -55,8 +55,6 @@
                         </svg>
                         {{ __('Organizations') }}
                     </x-nav-link>
-
-
 
                     <x-nav-link href="{{ route('admin.plans.index') }}" :active="request()->routeIs('admin.plans.*')" class="text-slate-300 hover:bg-slate-800 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-150">
                         <svg class="mr-3 flex-shrink-0 h-6 w-6 text-slate-400 group-hover:text-rose-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -91,23 +89,28 @@
                     </button>
 
                     <!-- Page Title (Optional) -->
-                    <h1 class="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                    <h1 class="text-xl font-semibold text-gray-800 dark:text-gray-200 hidden md:block">
                         {{ $header ?? '' }}
                     </h1>
 
-                    <!-- User Dropdown (Reused from Jetstream or Simplified) -->
-                    <div class="relative ml-3">
-                        <x-dropdown align="right" width="48">
-                            <x-slot name="trigger">
-                                <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none transition duration-150 ease-in-out">
-                                    <div>{{ Auth::user()->name }}</div>
-                                    <div class="ml-1">
-                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                </button>
-                            </x-slot>
+                    <div class="flex items-center ml-3">
+                        <div class="mr-3">
+                            <x-theme-toggle />
+                        </div>
+
+                        <!-- User Dropdown (Reused from Jetstream or Simplified) -->
+                        <div class="relative ml-3">
+                            <x-dropdown align="right" width="48">
+                                <x-slot name="trigger">
+                                    <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none transition duration-150 ease-in-out">
+                                        <div>{{ Auth::user()->name }}</div>
+                                        <div class="ml-1">
+                                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    </button>
+                                </x-slot>
 
                             <x-slot name="content">
                                 <!-- Authentication -->

@@ -99,7 +99,10 @@ class TenantController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $tenant = \App\Models\Tenant::findOrFail($id);
+        $plans = \App\Models\Plan::where('is_active', true)->get();
+        
+        return view('admin.tenants.edit', compact('tenant', 'plans'));
     }
 
     /**
@@ -107,7 +110,23 @@ class TenantController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $tenant = \App\Models\Tenant::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:tenants,slug,' . $tenant->id,
+            'plan_id' => 'nullable|exists:plans,id',
+            'status' => 'required|in:active,pending,suspended',
+        ]);
+
+        $tenant->update([
+            'name' => $request->name,
+            'slug' => $request->slug,
+            'plan_id' => $request->plan_id,
+            'status' => $request->status,
+        ]);
+
+        return redirect()->route('admin.tenants.index')->with('success', 'Organization updated successfully.');
     }
 
     /**
