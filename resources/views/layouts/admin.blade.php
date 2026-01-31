@@ -49,12 +49,14 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
-                     <x-nav-link href="{{ route('admin.tenants.index') }}" :active="request()->routeIs('admin.tenants.*')" class="text-slate-300 hover:bg-slate-800 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-150">
+                    <x-nav-link href="{{ route('admin.tenants.index') }}" :active="request()->routeIs('admin.tenants.*')" class="text-slate-300 hover:bg-slate-800 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-150">
                         <svg class="mr-3 flex-shrink-0 h-6 w-6 text-slate-400 group-hover:text-rose-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                         </svg>
                         {{ __('Organizations') }}
                     </x-nav-link>
+
+
 
                     <x-nav-link href="{{ route('admin.plans.index') }}" :active="request()->routeIs('admin.plans.*')" class="text-slate-300 hover:bg-slate-800 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-150">
                         <svg class="mr-3 flex-shrink-0 h-6 w-6 text-slate-400 group-hover:text-rose-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

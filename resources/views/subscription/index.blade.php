@@ -38,7 +38,7 @@
                     <!-- Change Plan / Subscribe -->
                     <div>
                         <h3 class="text-lg font-medium text-gray-900">Update Subscription</h3>
-                        <form action="{{ route('subscription.store') }}" method="POST" id="subscription-form" class="mt-4 space-y-4">
+                        <form action="{{ route('subscription.store', ['subdomain' => $tenant->slug]) }}" method="POST" id="subscription-form" class="mt-4 space-y-4">
                             @csrf
                             
                             <div>
@@ -69,7 +69,7 @@
                         @if ($tenant->subscribed('default') && !$tenant->subscription('default')->onGracePeriod())
                             <div class="mt-8 border-t pt-6">
                                 <h3 class="text-lg font-medium text-red-600">Danger Zone</h3>
-                                <form action="{{ route('subscription.destroy') }}" method="POST" class="mt-4" onsubmit="return confirm('Are you sure you want to cancel?');">
+                                <form action="{{ route('subscription.destroy', ['subdomain' => $tenant->slug]) }}" method="POST" class="mt-4" onsubmit="return confirm('Are you sure you want to cancel?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none">

@@ -19,9 +19,8 @@ class IdentifyTenant
         $tenant = app(\App\Services\CurrentTenant::class)->get();
 
         if (! $tenant) {
-            // Try to resolve if not already resolved (fallback, though TenantResolver should have run)
-            // For now, stricly enforce that TenantResolver must have found it.
-            abort(404, 'Tenant not found.');
+            // Redirect to central domain if tenant not found
+            return redirect(config('app.url'));
         }
 
         // Bind to request for convenience

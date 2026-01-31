@@ -17,9 +17,6 @@ Route::middleware([
         return view('admin.dashboard');
     })->name('admin.dashboard');
 
-    Route::resource('plans', \App\Http\Controllers\Admin\PlanController::class)->names('admin.plans');
-    Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users.index');
-    
-    Route::get('tenants/export', [\App\Http\Controllers\Admin\TenantController::class, 'export'])->name('admin.tenants.export');
-    Route::resource('tenants', \App\Http\Controllers\Admin\TenantController::class)->names('admin.tenants');
+    Route::get('/tenants/export', [App\Http\Controllers\Admin\TenantController::class, 'export'])->name('admin.tenants.export');
+    Route::resource('tenants', App\Http\Controllers\Admin\TenantController::class)->names('admin.tenants');
 });

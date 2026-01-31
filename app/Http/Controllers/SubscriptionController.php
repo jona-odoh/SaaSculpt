@@ -54,12 +54,12 @@ class SubscriptionController extends Controller
             if ($tenant->subscribed('default')) {
                 // If simple swap
                 $this->billing->swapPlan($tenant, $plan);
-                return redirect()->route('subscription.index')->with('status', 'Plan changed successfully!');
+                return redirect()->route('subscription.index', ['subdomain' => $tenant->slug])->with('status', 'Plan changed successfully!');
             }
 
             $this->billing->createSubscription($tenant, $plan, $request->input('payment_method'));
             
-            return redirect()->route('subscription.index')->with('status', 'Subscription active!');
+            return redirect()->route('subscription.index', ['subdomain' => $tenant->slug])->with('status', 'Subscription active!');
         } catch (IncompletePayment $exception) {
             return redirect()->back()->with('error', 'Payment incomplete. Please check your card.');
         } catch (\Exception $e) {
@@ -82,7 +82,7 @@ class SubscriptionController extends Controller
                 $tenant->owner->notify(new \App\Notifications\SubscriptionCancelled());
             }
 
-            return redirect()->route('subscription.index')->with('status', 'Subscription cancelled.');
+            return redirect()->route('subscription.index', ['subdomain' => $tenant->slug])->with('status', 'Subscription cancelled.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error cancelling: ' . $e->getMessage());
         }
