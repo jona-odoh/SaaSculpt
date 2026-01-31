@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Actions\Jetstream\CreateTenant;
 use App\Models\Tenant;
 use App\Models\User;
 use App\Policies\TenantPolicy;
@@ -27,24 +28,7 @@ class JetstreamServiceProvider extends ServiceProvider
 
         Jetstream::useTeamModel(Tenant::class);
 
-        Jetstream::createTeamsUsing(function (User $user, string $name) {
-            $tenant = new Tenant;
-            // Generate slug from name
-            $slug = \Illuminate\Support\Str::slug($name);
-            // Ensure unique slug... (basic logic)
-            // In production, we'd check DB loop
-            
-            $tenant->forceFill([
-                'user_id' => $user->id,
-                'name' => $name,
-                'slug' => $slug,
-                'personal_team' => false,
-            ])->save();
-            
-            $user->teams()->attach($tenant, ['role' => 'admin']);
-
-            return $tenant;
-        });
+        Jetstream::createTeamsUsing(CreateTenant::class);
     }
 
     /**
