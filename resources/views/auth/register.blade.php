@@ -10,9 +10,26 @@
             @csrf
 
             <div>
-                <x-label for="name" value="{{ __('Name') }}" />
+                <x-label for="name" value="{{ __('Full Name') }}" />
                 <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
             </div>
+
+            <div class="mt-4">
+                <x-label for="company_name" value="{{ __('Organization Name') }}" />
+                <x-input id="company_name" class="block mt-1 w-full" type="text" name="company_name" :value="old('company_name')" required placeholder="Acme Inc." />
+            </div>
+
+            <div class="mt-4">
+                <x-label for="company_slug" value="{{ __('Subdomain') }}" />
+                <div class="flex rounded-md shadow-sm mt-1">
+                    <x-input id="company_slug" class="block w-full rounded-none rounded-l-md border-r-0" type="text" name="company_slug" :value="old('company_slug')" required placeholder="acme" />
+                    <span class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                        .{{ config('app.url_base', 'saasculpt.test') }}
+                    </span>
+                </div>
+            </div>
+
+            <input type="hidden" name="plan" value="{{ request('plan', 'free') }}">
 
             <div class="mt-4">
                 <x-label for="email" value="{{ __('Email') }}" />

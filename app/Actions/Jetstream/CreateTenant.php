@@ -26,10 +26,13 @@ class CreateTenant implements CreatesTeams
         ])->validateWithBag('createTeam');
 
         return tap(new Tenant, function ($tenant) use ($user, $input) {
-            $slug = \Illuminate\Support\Str::slug($input['name']);
-            // Basic uniqueness check (should be more robust in prod)
-            if (Tenant::where('slug', $slug)->exists()) {
-               $slug .= '-' . time();
+            $slug = $input['slug'] ?? \Illuminate\Support\Str::slug($input['name']);
+
+            // Fetch Plan
+            $plan = \App\Models\Plan::where('slug', $input['plan_slug'] ?? 'free')->first();
+            // Fallback to first available plan if 'free' doesn't exist, or handle gracefully
+            if (!$plan) {
+                 $plan = \App\Models\Plan::first();
             }
 
             $tenant->forceFill([
@@ -37,9 +40,11 @@ class CreateTenant implements CreatesTeams
                 'name' => $input['name'],
                 'slug' => $slug,
                 'personal_team' => false,
+                'plan_id' => $plan?->id,
             ])->save();
 
             $user->teams()->attach($tenant, ['role' => 'admin']);
+            $user->switchTeam($tenant);
         });
     }
 }

@@ -14,6 +14,13 @@ return [
     |
     */
 
+    'mailgun' => [
+        'domain' => env('MAILGUN_DOMAIN'),
+        'secret' => env('MAILGUN_SECRET'),
+        'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
+        'scheme' => 'https',
+    ],
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
@@ -23,12 +30,19 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
-
-    'slack' => [
-        'notifications' => [
-            'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
-            'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
-        ],
+    
+    'stripe' => [
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
     ],
+    
+    'paystack' => [
+        'publicKey' => env('PAYSTACK_PUBLIC_KEY'),
+        'secretKey' => env('PAYSTACK_SECRET_KEY'),
+        'paymentUrl' => env('PAYSTACK_PAYMENT_URL'),
+        'merchantEmail' => env('MERCHANT_EMAIL'),
+    ],
+    
+    'payment_gateway' => env('PAYMENT_GATEWAY', 'stripe'), // stripe or paystack
 
 ];

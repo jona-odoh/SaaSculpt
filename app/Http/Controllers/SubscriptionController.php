@@ -76,6 +76,12 @@ class SubscriptionController extends Controller
 
         try {
             $this->billing->cancelSubscription($tenant);
+            
+            // Notify the owner
+            if ($tenant->owner) {
+                $tenant->owner->notify(new \App\Notifications\SubscriptionCancelled());
+            }
+
             return redirect()->route('subscription.index')->with('status', 'Subscription cancelled.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error cancelling: ' . $e->getMessage());

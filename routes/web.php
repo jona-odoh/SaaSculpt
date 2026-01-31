@@ -1,21 +1,31 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::domain(config('app.url_base', 'saasculpt.test'))->group(function () {
+    Route::get('/', function () {
+        return view('welcome');
+    });
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::middleware([
+        'auth:sanctum',
+        config('jetstream.auth_session'),
+        'verified',
+    ])->group(function () {
+        // User profile specific routes or central dashboard if needed
+        Route::get('/home', function () {
+             /** @var \App\Models\User $user */
+             $user = Auth::user();
+             // Redirect to user's first team or a specific tenant
+             return redirect()->route('tenant.dashboard', ['subdomain' => $user->allTeams()->first()->slug ?? 'www']);
+        })->name('home');
 
-    Route::get('/subscription', [App\Http\Controllers\SubscriptionController::class, 'index'])->name('subscription.index');
-    Route::post('/subscription', [App\Http\Controllers\SubscriptionController::class, 'store'])->name('subscription.store');
-    Route::delete('/subscription', [App\Http\Controllers\SubscriptionController::class, 'destroy'])->name('subscription.destroy');
+        Route::get('/dashboard', function () {
+             /** @var \App\Models\User $user */
+             $user = Auth::user();
+             // Redirect to user's first team or a specific tenant
+             return redirect()->route('tenant.dashboard', ['subdomain' => $user->allTeams()->first()->slug ?? 'www']);
+        })->name('dashboard');
+    });
 });

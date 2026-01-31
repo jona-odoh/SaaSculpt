@@ -30,7 +30,7 @@ class PlanController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $data = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:plans,slug',
             'stripe_price_id' => 'required|string|max:255',
@@ -38,11 +38,15 @@ class PlanController extends Controller
             'price' => 'required|integer',
             'currency' => 'required|string|max:3',
             'interval' => 'required|in:monthly,yearly',
-            'features' => 'nullable|array',
+            'features' => 'nullable|string',
             'is_active' => 'boolean',
         ]);
 
-        Plan::create($validated);
+        if ($request->has('features')) {
+            $data['features'] = array_filter(array_map('trim', explode("\n", $request->input('features'))));
+        }
+
+        Plan::create($data);
 
         return redirect()->route('admin.plans.index')->with('success', 'Plan created successfully.');
     }
@@ -60,7 +64,7 @@ class PlanController extends Controller
      */
     public function update(Request $request, Plan $plan)
     {
-        $validated = $request->validate([
+        $data = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:plans,slug,' . $plan->id,
             'stripe_price_id' => 'required|string|max:255',
@@ -68,11 +72,15 @@ class PlanController extends Controller
             'price' => 'required|integer',
             'currency' => 'required|string|max:3',
             'interval' => 'required|in:monthly,yearly',
-            'features' => 'nullable|array',
+            'features' => 'nullable|string',
             'is_active' => 'boolean',
         ]);
 
-        $plan->update($validated);
+        if ($request->has('features')) {
+            $data['features'] = array_filter(array_map('trim', explode("\n", $request->input('features'))));
+        }
+
+        $plan->update($data);
 
         return redirect()->route('admin.plans.index')->with('success', 'Plan updated successfully.');
     }

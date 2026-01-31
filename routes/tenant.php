@@ -12,6 +12,10 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('tenant.dashboard');
-    
-    // Add other tenant-specific routes here
+
+    Route::controller(\App\Http\Controllers\SubscriptionController::class)->group(function () {
+        Route::get('/subscription', 'index')->name('subscription.index');
+        Route::post('/subscription', 'store')->name('subscription.store');
+        Route::delete('/subscription', 'destroy')->name('subscription.destroy');
+    });
 });

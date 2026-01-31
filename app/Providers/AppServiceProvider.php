@@ -12,7 +12,13 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(\App\Services\CurrentTenant::class);
-        $this->app->bind(\App\Contracts\BillingService::class, \App\Services\StripeBillingService::class);
+        
+        $this->app->bind(\App\Contracts\BillingService::class, function ($app) {
+            if (config('services.payment_gateway') === 'paystack') {
+                return new \App\Services\PaystackBillingService();
+            }
+            return new \App\Services\StripeBillingService();
+        });
     }
 
     /**

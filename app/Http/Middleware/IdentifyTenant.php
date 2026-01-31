@@ -16,29 +16,16 @@ class IdentifyTenant
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $host = $request->getHost();
-        $subdomain = explode('.', $host)[0];
-
-        // Improve: Check if it's a central domain (e.g. www or root)
-        // For now, assume central domain logic is handled by route grouping or another middleware.
-        // If subdomain is 'www' or matches APP_URL host, we might skip or abort.
-        
-        $tenant = Tenant::where('slug', $subdomain)->first();
+        $tenant = app(\App\Services\CurrentTenant::class)->get();
 
         if (! $tenant) {
+            // Try to resolve if not already resolved (fallback, though TenantResolver should have run)
+            // For now, stricly enforce that TenantResolver must have found it.
             abort(404, 'Tenant not found.');
         }
 
-        // Bind logic
-        // We can put $tenant in container or set on request
+        // Bind to request for convenience
         $request->attributes->set('tenant', $tenant);
-        
-        // Also bind to a service or singleton
-        app()->instance('currentTenant', $tenant);
-        
-        // Set Global Scope?
-        // TenantScope::setTenant($tenant); 
-        // Or configure db connection if using multi-db (not this project).
 
         return $next($request);
     }

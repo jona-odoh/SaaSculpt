@@ -25,6 +25,9 @@ class CreateNewUser implements CreatesNewUsers
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
+            'company_name' => ['required', 'string', 'max:255'],
+            'company_slug' => ['required', 'string', 'max:255', 'unique:tenants,slug', 'regex:/^[a-zA-Z0-9\-]+$/'],
+            'plan' => ['nullable', 'string', 'exists:plans,slug'],
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
 
@@ -33,8 +36,8 @@ class CreateNewUser implements CreatesNewUsers
                 'name' => $input['name'],
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
-            ]), function (User $user) {
-                $this->createTeam($user);
+            ]), function (User $user) use ($input) {
+                $this->createTeam($user, $input);
             });
         });
     }
@@ -42,12 +45,15 @@ class CreateNewUser implements CreatesNewUsers
     /**
      * Create a personal team for the user.
      */
-    protected function createTeam(User $user): void
+    protected function createTeam(User $user, array $input): void
     {
-        $user->ownedTeams()->save(Team::forceCreate([
-            'user_id' => $user->id,
-            'name' => explode(' ', $user->name, 2)[0]."'s Team",
-            'personal_team' => true,
-        ]));
+        // Use the CreateTenant action to create the organization
+        $creator = new \App\Actions\Jetstream\CreateTenant();
+        
+        $creator->create($user, [
+            'name' => $input['company_name'],
+            'slug' => $input['company_slug'],
+            'plan_slug' => $input['plan'] ?? 'free',
+        ]);
     }
 }
